@@ -1,13 +1,11 @@
 package com.example.jetpackpro
 
-class MainViewModel(private val cuboidModel: CuboidModel) {
-    fun getCircumference() = cuboidModel.getCircumference()
+import androidx.lifecycle.ViewModel
 
-    fun getSurfaceArea() = cuboidModel.getSurfaceArea()
+class MainViewModel : ViewModel() {
+    var result = 0
 
-    fun getVolume() = cuboidModel.getVolume()
-
-    fun save(w: Double, l: Double, h: Double) {
-        cuboidModel.save(w, l, h)
+    fun calculate(width: String, height: String, length: String){
+        result = width.toInt() * height.toInt() * length.toInt()
     }
 }
