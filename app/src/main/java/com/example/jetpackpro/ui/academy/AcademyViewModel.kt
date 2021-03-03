@@ -7,5 +7,4 @@ import com.example.jetpackpro.utils.DataDummy
 class AcademyViewModel : ViewModel() {
     fun getCourses() : List<CourseEntity> = DataDummy.generateDummyCourses()
 
-
 }

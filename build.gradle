@@ -38,4 +38,7 @@ ext {
     materialVersion = '1.2.1'
     recyclerViewVersion = '1.1.0'
     glideVersion = '4.11.0'
+
+    //get view in test without binding
+    androidXTestVersion = '1.2.0'
 }
