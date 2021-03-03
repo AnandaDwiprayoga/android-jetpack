@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jetpackpro.databinding.FragmentAcademyBinding
 import com.example.jetpackpro.utils.DataDummy
+import com.example.jetpackpro.viewmode.ViewModelFactory
 
 class AcademyFragment : Fragment() {
 
@@ -31,7 +32,8 @@ class AcademyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
-            val viewModel = ViewModelProvider(this,ViewModelProvider.NewInstanceFactory())[AcademyViewModel::class.java]
+            val factory = ViewModelFactory.getInstance(requireContext())
+            val viewModel = ViewModelProvider(this,factory)[AcademyViewModel::class.java]
             val courses = viewModel.getCourses()
 
             val academyAdapter = AcademyAdapter()

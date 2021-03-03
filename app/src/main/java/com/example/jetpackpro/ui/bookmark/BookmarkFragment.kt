@@ -12,6 +12,7 @@ import com.example.jetpackpro.R
 import com.example.jetpackpro.data.CourseEntity
 import com.example.jetpackpro.databinding.FragmentBookmarkBinding
 import com.example.jetpackpro.utils.DataDummy
+import com.example.jetpackpro.viewmode.ViewModelFactory
 
 class BookmarkFragment : Fragment(), BookmarkAdapter.BookmarkFragmentCallback {
 
@@ -30,7 +31,8 @@ class BookmarkFragment : Fragment(), BookmarkAdapter.BookmarkFragmentCallback {
         super.onViewCreated(view, savedInstanceState)
 
         if(activity != null){
-            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[BookmarkViewModel::class.java]
+            val factory = ViewModelFactory.getInstance(requireActivity())
+            val viewModel = ViewModelProvider(this, factory)[BookmarkViewModel::class.java]
             val courses = viewModel.getBookmars()
             val adapter = BookmarkAdapter(this)
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.jetpackpro.R
 import com.example.jetpackpro.ui.reader.content.ModuleContentFragment
 import com.example.jetpackpro.ui.reader.list.ModuleListFragment
+import com.example.jetpackpro.viewmode.ViewModelFactory
 
 class CourseReaderActivity : AppCompatActivity(), CourseReaderCallback {
 
@@ -18,7 +19,8 @@ class CourseReaderActivity : AppCompatActivity(), CourseReaderCallback {
         setContentView(R.layout.activity_course_reader)
 
         val bundle = intent.extras
-        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[CourseReaderViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(this)
+        val viewModel = ViewModelProvider(this, factory)[CourseReaderViewModel::class.java]
         if(bundle != null){
             val courseId = bundle.getString(EXTRA_COURSE_ID)
             if(courseId != null){

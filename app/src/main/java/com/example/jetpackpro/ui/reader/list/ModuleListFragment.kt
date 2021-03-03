@@ -16,6 +16,7 @@ import com.example.jetpackpro.ui.reader.CourseReaderActivity
 import com.example.jetpackpro.ui.reader.CourseReaderCallback
 import com.example.jetpackpro.ui.reader.CourseReaderViewModel
 import com.example.jetpackpro.utils.DataDummy
+import com.example.jetpackpro.viewmode.ViewModelFactory
 
 class ModuleListFragment : Fragment(), ModuleListAdapter.MyAdapterClickListener {
 
@@ -43,7 +44,8 @@ class ModuleListFragment : Fragment(), ModuleListAdapter.MyAdapterClickListener 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory())[CourseReaderViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(requireActivity())
+        viewModel = ViewModelProvider(requireActivity(), factory)[CourseReaderViewModel::class.java]
         adapter = ModuleListAdapter(this)
         populateRecyclerView(viewModel.getModules())
     }

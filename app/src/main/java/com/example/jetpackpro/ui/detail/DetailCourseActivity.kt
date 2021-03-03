@@ -15,6 +15,7 @@ import com.example.jetpackpro.databinding.ActivityDetailCourseBinding
 import com.example.jetpackpro.databinding.ContentDetailCourseBinding
 import com.example.jetpackpro.ui.reader.CourseReaderActivity
 import com.example.jetpackpro.utils.DataDummy
+import com.example.jetpackpro.viewmode.ViewModelFactory
 
 class DetailCourseActivity : AppCompatActivity() {
 
@@ -35,7 +36,8 @@ class DetailCourseActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val viewModel = ViewModelProvider(this,ViewModelProvider.NewInstanceFactory())[DetailCourseViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(this)
+        val viewModel = ViewModelProvider(this,factory)[DetailCourseViewModel::class.java]
         val adapter = DetailCourseAdapter()
 
 
