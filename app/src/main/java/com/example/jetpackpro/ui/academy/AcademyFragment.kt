@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jetpackpro.databinding.FragmentAcademyBinding
@@ -34,10 +35,15 @@ class AcademyFragment : Fragment() {
         if (activity != null) {
             val factory = ViewModelFactory.getInstance(requireContext())
             val viewModel = ViewModelProvider(this,factory)[AcademyViewModel::class.java]
-            val courses = viewModel.getCourses()
 
             val academyAdapter = AcademyAdapter()
-            academyAdapter.setCourses(courses)
+
+            fragmentAcademyBinding.progressBar.visibility = View.VISIBLE
+            viewModel.getCourses().observe(this, Observer { courses ->
+                fragmentAcademyBinding.progressBar.visibility = View.GONE
+                academyAdapter.setCourses(courses)
+                academyAdapter.notifyDataSetChanged()
+            })
 
             with(fragmentAcademyBinding.rvAcademy) {
                 layoutManager = LinearLayoutManager(context)

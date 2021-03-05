@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,7 +48,12 @@ class ModuleListFragment : Fragment(), ModuleListAdapter.MyAdapterClickListener 
         val factory = ViewModelFactory.getInstance(requireActivity())
         viewModel = ViewModelProvider(requireActivity(), factory)[CourseReaderViewModel::class.java]
         adapter = ModuleListAdapter(this)
-        populateRecyclerView(viewModel.getModules())
+
+        fragmentModuleListBinding.progressBar.visibility = View.VISIBLE
+        viewModel.getModules().observe(this, Observer { modules ->
+            fragmentModuleListBinding.progressBar.visibility = View.GONE
+            populateRecyclerView(modules)
+        })
     }
 
     override fun onAttach(context: Context) {

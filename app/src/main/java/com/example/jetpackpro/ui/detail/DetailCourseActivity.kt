@@ -2,7 +2,9 @@ package com.example.jetpackpro.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,8 +34,8 @@ class DetailCourseActivity : AppCompatActivity() {
         detailContentBinding = activityDetailCourseBinding.detailContent
 
         setContentView(activityDetailCourseBinding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        setSupportActionBar(activityDetailCourseBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val factory = ViewModelFactory.getInstance(this)
@@ -45,10 +47,22 @@ class DetailCourseActivity : AppCompatActivity() {
         if(extras != null){
             val courseId = extras.getString(EXTRA_COURSE)
             if(courseId != null){
+
+                activityDetailCourseBinding.progressBar.visibility = View.VISIBLE
+                activityDetailCourseBinding.content.visibility = View.INVISIBLE
+
                 viewModel.setSelectedCourse(courseId)
-                val modules = viewModel.getModules()
-                adapter.setModules(modules)
-                populateCourse(viewModel.getCourse() as CourseEntity)
+                viewModel.getModules().observe(this, Observer {
+                    activityDetailCourseBinding.progressBar.visibility = View.GONE
+                    activityDetailCourseBinding.content.visibility = View.VISIBLE
+
+                    adapter.setModules(it)
+                    adapter.notifyDataSetChanged()
+                })
+
+                viewModel.getCourse().observe(this, Observer {
+                    populateCourse(it)
+                })
             }
         }
 

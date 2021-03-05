@@ -1,5 +1,6 @@
 package com.example.jetpackpro.ui.reader
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.jetpackpro.AcademyRepository
 import com.example.jetpackpro.data.ContentEntity
@@ -18,7 +19,7 @@ class CourseReaderViewModel(private val academyRepository: AcademyRepository) : 
         this.moduleId = moduleId
     }
 
-    fun getModules(): ArrayList<ModuleEntity> = academyRepository.getAllModulesByCourse(courseId) as ArrayList<ModuleEntity>
+    fun getModules(): LiveData<ArrayList<ModuleEntity>> = academyRepository.getAllModulesByCourse(courseId) as LiveData<ArrayList<ModuleEntity>>
 
-    fun getSelectedModule(): ModuleEntity = academyRepository.getContent(courseId, moduleId)
+    fun getSelectedModule(): LiveData<ModuleEntity> = academyRepository.getContent(courseId, moduleId)
 }
