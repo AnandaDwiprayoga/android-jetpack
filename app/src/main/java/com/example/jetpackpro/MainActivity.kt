@@ -1,15 +1,21 @@
 package com.example.jetpackpro
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.jetpackpro.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,14 +24,37 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
-        subscribe()
+        supportActionBar?.hide()
+
+        mainViewModel.findRestaurant()
+        mainViewModel.restaurant.observe(this, Observer { restaurant ->
+            activityMainBinding.tvTitle.text = restaurant.name
+            activityMainBinding.tvDescription.text = "${restaurant.description?.take(100)}..."
+            Glide.with(this)
+                .load("https://restaurant-api.dicoding.dev/images/large/${restaurant.pictureId}")
+                .into(activityMainBinding.ivPicture)
+        })
+
+        mainViewModel.listReview.observe(this, Observer { customerReviews ->
+            val listReview = customerReviews.map {
+                "${it.review}\n- ${it.name}"
+            }
+            activityMainBinding.lvReview.adapter =
+                ArrayAdapter(this, R.layout.item_review, listReview)
+            activityMainBinding.edReview.setText("")
+        })
+
+        mainViewModel.isLoading.observe(this, Observer {
+            activityMainBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
+        activityMainBinding.btnSend.setOnClickListener {
+            mainViewModel.postReview(activityMainBinding.edReview.text.toString())
+
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken,0)
+        }
+
     }
 
-    private fun subscribe() {
-        mainViewModel.mElapsedTime.observe(this, Observer {
-            val newText = this@MainActivity.resources.getString(R.string.seconds, it)
-            activityMainBinding.timerTextview.text = newText
-        })
-    }
 }
