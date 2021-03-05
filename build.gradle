@@ -32,13 +32,17 @@ ext {
     constraintLayoutVersion = '2.0.4'
     junitVersion = '4.13.1'
     junitExtversion = '1.1.2'
-    espressoVersion = '3.3.0'
+    espressoVersion = '3.1.0'
     androidTestVersion = '1.3.0'
 
     materialVersion = '1.2.1'
     recyclerViewVersion = '1.1.0'
     glideVersion = '4.11.0'
+    androidTestVersion = "2.1.0"
+    androidCoreTestVersion = "2.1.0"
 
     //get view in test without binding
     androidXTestVersion = '1.2.0'
+
+    mockitoKotlinVersion = '2.2.0'
 }
