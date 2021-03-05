@@ -2,80 +2,30 @@ package com.example.jetpackpro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
-import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.jetpackpro.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
+
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //view binding
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        mainViewModel = MainViewModel(CuboidModel())
-
-        activityMainBinding.btnSave.setOnClickListener(this)
-        activityMainBinding.btnCalculateSurfaceArea.setOnClickListener(this)
-        activityMainBinding.btnCalculateCircumference.setOnClickListener(this)
-        activityMainBinding.btnCalculateVolume.setOnClickListener(this)
+        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
+        subscribe()
     }
 
-    override fun onClick(v: View?) {
-        val length = activityMainBinding.edtLength.text.toString().trim()
-        val width = activityMainBinding.edtWidth.text.toString().trim()
-        val height = activityMainBinding.edtHeight.text.toString().trim()
-
-        when {
-            TextUtils.isEmpty(length) -> {
-                activityMainBinding.edtLength.error = "Field ini tidak boleh kosong"
-            }
-            TextUtils.isEmpty(width) -> {
-                activityMainBinding.edtWidth.error = "Field ini tidak boleh kosong"
-            }
-            TextUtils.isEmpty(height) -> {
-                activityMainBinding.edtHeight.error = "Field ini tidak boleh kosong"
-            }
-            else -> {
-                val valueLength = length.toDouble()
-                val valueWidth = width.toDouble()
-                val valueHeight = height.toDouble()
-                when (v?.id) {
-                    R.id.btn_save -> {
-                        mainViewModel.save(valueLength, valueWidth, valueHeight)
-                        visible()
-                    }
-                    R.id.btn_calculate_circumference -> {
-                        activityMainBinding.tvResult.text = mainViewModel.getCircumference().toString()
-                        gone()
-                    }
-                    R.id.btn_calculate_surface_area -> {
-                        activityMainBinding.tvResult.text = mainViewModel.getSurfaceArea().toString()
-                        gone()
-                    }
-                    R.id.btn_calculate_volume -> {
-                        activityMainBinding.tvResult.text = mainViewModel.getVolume().toString()
-                        gone()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun gone() {
-        activityMainBinding.btnCalculateVolume.visibility = View.GONE
-        activityMainBinding.btnCalculateCircumference.visibility = View.GONE
-        activityMainBinding.btnCalculateSurfaceArea.visibility = View.GONE
-        activityMainBinding.btnSave.visibility = View.VISIBLE
-    }
-
-    private fun visible() {
-        activityMainBinding.btnCalculateVolume.visibility = View.VISIBLE
-        activityMainBinding.btnCalculateCircumference.visibility = View.VISIBLE
-        activityMainBinding.btnCalculateSurfaceArea.visibility = View.VISIBLE
-        activityMainBinding.btnSave.visibility = View.GONE
+    private fun subscribe() {
+        mainViewModel.mElapsedTime.observe(this, Observer {
+            val newText = this@MainActivity.resources.getString(R.string.seconds, it)
+            activityMainBinding.timerTextview.text = newText
+        })
     }
 }

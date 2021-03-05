@@ -54,4 +54,7 @@ dependencies {
     //testing
     testImplementation 'org.mockito:mockito-core:3.6.0'
     testImplementation 'org.mockito:mockito-inline:3.6.0'
+
+    // live data
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
 }

@@ -1,13 +1,30 @@
 package com.example.jetpackpro
 
-class MainViewModel(private val cuboidModel: CuboidModel) {
-    fun getCircumference() = cuboidModel.getCircumference()
+import android.os.SystemClock
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import java.util.*
 
-    fun getSurfaceArea() = cuboidModel.getSurfaceArea()
+class MainViewModel : ViewModel() {
+    companion object {
+        private const val ONE_SECOND = 1000
+    }
 
-    fun getVolume() = cuboidModel.getVolume()
+    private val mInitialTime = SystemClock.elapsedRealtime()
 
-    fun save(w: Double, l: Double, h: Double) {
-        cuboidModel.save(w, l, h)
+    private val _mElapsedTime = MutableLiveData<Long>()
+    val mElapsedTime : LiveData<Long> = _mElapsedTime
+
+
+    init {
+        val timer = Timer()
+        timer.scheduleAtFixedRate(object : TimerTask(){
+            override fun run() {
+                 val value = (SystemClock.elapsedRealtime() - mInitialTime) / 100
+                _mElapsedTime.postValue(value)
+            }
+
+        }, ONE_SECOND.toLong(), ONE_SECOND.toLong())
     }
 }

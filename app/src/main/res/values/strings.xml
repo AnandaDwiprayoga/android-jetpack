@@ -1,11 +1,5 @@
 <resources>
     <string name="app_name">JetpackPro</string>
-    <string name="width">Lebar</string>
-    <string name="result">Hasil</string>
-    <string name="calculate_volume">Hitung Volume</string>
-    <string name="calculate_surface_area">Hitung Luas Area</string>
-    <string name="calculate_circumference">Hitung Keliling</string>
-    <string name="height">Tinggi</string>
-    <string name="length">Panjang</string>
-    <string name="save">Simpan</string>
+    <string name="seconds">%d seconds elapsed</string>
+    <string name="hello_dicoding">Hello Dicoding!</string>
 </resources>
