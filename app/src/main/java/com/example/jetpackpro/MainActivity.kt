@@ -2,13 +2,14 @@ package com.example.jetpackpro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.View
 import com.example.jetpackpro.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,66 +17,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        mainViewModel = MainViewModel(CuboidModel())
-
-        activityMainBinding.btnSave.setOnClickListener(this)
-        activityMainBinding.btnCalculateSurfaceArea.setOnClickListener(this)
-        activityMainBinding.btnCalculateCircumference.setOnClickListener(this)
-        activityMainBinding.btnCalculateVolume.setOnClickListener(this)
-    }
-
-    override fun onClick(v: View?) {
-        val length = activityMainBinding.edtLength.text.toString().trim()
-        val width = activityMainBinding.edtWidth.text.toString().trim()
-        val height = activityMainBinding.edtHeight.text.toString().trim()
-
-        when {
-            TextUtils.isEmpty(length) -> {
-                activityMainBinding.edtLength.error = "Field ini tidak boleh kosong"
-            }
-            TextUtils.isEmpty(width) -> {
-                activityMainBinding.edtWidth.error = "Field ini tidak boleh kosong"
-            }
-            TextUtils.isEmpty(height) -> {
-                activityMainBinding.edtHeight.error = "Field ini tidak boleh kosong"
-            }
-            else -> {
-                val valueLength = length.toDouble()
-                val valueWidth = width.toDouble()
-                val valueHeight = height.toDouble()
-                when (v?.id) {
-                    R.id.btn_save -> {
-                        mainViewModel.save(valueLength, valueWidth, valueHeight)
-                        visible()
-                    }
-                    R.id.btn_calculate_circumference -> {
-                        activityMainBinding.tvResult.text = mainViewModel.getCircumference().toString()
-                        gone()
-                    }
-                    R.id.btn_calculate_surface_area -> {
-                        activityMainBinding.tvResult.text = mainViewModel.getSurfaceArea().toString()
-                        gone()
-                    }
-                    R.id.btn_calculate_volume -> {
-                        activityMainBinding.tvResult.text = mainViewModel.getVolume().toString()
-                        gone()
-                    }
-                }
-            }
+        activityMainBinding.button.setOnClickListener {
+            delay1()
+            delay2()
         }
     }
 
-    private fun gone() {
-        activityMainBinding.btnCalculateVolume.visibility = View.GONE
-        activityMainBinding.btnCalculateCircumference.visibility = View.GONE
-        activityMainBinding.btnCalculateSurfaceArea.visibility = View.GONE
-        activityMainBinding.btnSave.visibility = View.VISIBLE
+    private fun delay2() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            activityMainBinding.textView.text = getString(R.string.delay2)
+        }, 3000)
     }
 
-    private fun visible() {
-        activityMainBinding.btnCalculateVolume.visibility = View.VISIBLE
-        activityMainBinding.btnCalculateCircumference.visibility = View.VISIBLE
-        activityMainBinding.btnCalculateSurfaceArea.visibility = View.VISIBLE
-        activityMainBinding.btnSave.visibility = View.GONE
+    private fun delay1() {
+        EspressoIdlingResource.increment()
+        Handler(Looper.getMainLooper()).postDelayed({
+            activityMainBinding.textView.text = getString(R.string.delay1)
+
+            if(!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow){
+                EspressoIdlingResource.decrement()
+            }
+        }, 2000)
     }
+
 }

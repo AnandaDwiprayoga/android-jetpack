@@ -1,11 +1,7 @@
 <resources>
     <string name="app_name">JetpackPro</string>
-    <string name="width">Lebar</string>
-    <string name="result">Hasil</string>
-    <string name="calculate_volume">Hitung Volume</string>
-    <string name="calculate_surface_area">Hitung Luas Area</string>
-    <string name="calculate_circumference">Hitung Keliling</string>
-    <string name="height">Tinggi</string>
-    <string name="length">Panjang</string>
-    <string name="save">Simpan</string>
+    <string name="start">Mulai</string>
+    <string name="delay1">Delay 1 Selesai</string>
+    <string name="delay2">Delay 2 Selesai</string>
+    <string name="prepare">Persiapan</string>
 </resources>
