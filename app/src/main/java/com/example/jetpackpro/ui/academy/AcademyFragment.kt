@@ -39,7 +39,7 @@ class AcademyFragment : Fragment() {
             val academyAdapter = AcademyAdapter()
 
             fragmentAcademyBinding.progressBar.visibility = View.VISIBLE
-            viewModel.getCourses().observe(this, Observer { courses ->
+            viewModel.getCourses().observe(viewLifecycleOwner, Observer { courses ->
                 fragmentAcademyBinding.progressBar.visibility = View.GONE
                 academyAdapter.setCourses(courses)
                 academyAdapter.notifyDataSetChanged()

@@ -29,6 +29,9 @@ class AcademyViewModelTest {
     private lateinit var academyRepository: AcademyRepository
 
 
+    @Mock
+    private lateinit var observer: Observer<List<CourseEntity>>
+
     @Before
     fun setUp() {
         viewModel = AcademyViewModel(academyRepository)
@@ -40,11 +43,13 @@ class AcademyViewModelTest {
         val courses = MutableLiveData<List<CourseEntity>>()
         courses.value = dummyCourses
 
-        `when`(academyRepository.getAllCourses()).thenReturn(courses.value)
+        `when`(academyRepository.getAllCourses()).thenReturn(courses)
         val courseEntities = viewModel.getCourses()
         verify(academyRepository).getAllCourses()
         assertNotNull(courseEntities)
-        assertEquals(5, courseEntities.size)
+        assertEquals(5, courseEntities.value?.size)
 
+        viewModel.getCourses().observeForever(observer)
+        verify(observer).onChanged(dummyCourses)
     }
 }
