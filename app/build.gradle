@@ -58,6 +58,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.test.espresso:espresso-idling-resource:$idleResourceVersion"
 
     //testing
     testImplementation "junit:junit:$junitVersion"
@@ -72,6 +73,7 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$androidCoreTestVersion"
     testImplementation "androidx.arch.core:core-testing:$androidCoreTestVersion"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+
 
     //mockito inline so can test final class
     testImplementation 'org.mockito:mockito-inline:2.25.0'
