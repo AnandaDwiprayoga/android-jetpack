@@ -47,4 +47,10 @@ ext {
     androidXTestVersion = '1.2.0'
 
     mockitoKotlinVersion = '2.2.0'
+
+    roomVersion = '2.2.3'
+    roomRuntimeVersion = '2.2.5'
+
+    roomVersion = '2.2.3'
+    roomRuntimeVersion = '2.2.5'
 }

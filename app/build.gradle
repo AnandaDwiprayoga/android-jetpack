@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
 }
 
 androidExtensions { experimental = true }
@@ -79,7 +80,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:2.25.0'
     testImplementation "org.mockito:mockito-core:2.25.0"
 
-
-
-
+    //room
+    implementation "androidx.room:room-runtime:$roomRuntimeVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 }
