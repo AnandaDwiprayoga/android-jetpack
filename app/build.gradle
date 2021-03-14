@@ -62,4 +62,7 @@ dependencies {
     //testing
     testImplementation 'org.mockito:mockito-core:3.6.0'
     testImplementation 'org.mockito:mockito-inline:3.6.0'
+
+    //pagination
+    implementation 'androidx.paging:paging-runtime:2.1.2'
 }

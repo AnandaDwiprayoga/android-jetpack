@@ -2,6 +2,7 @@ package com.example.jetpackpro.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import com.example.jetpackpro.database.Note
 import com.example.jetpackpro.database.NoteDao
 import com.example.jetpackpro.database.NoteDatabase
@@ -17,7 +18,7 @@ class NoteRepository(application: Application) {
         mNotesDao = db.noteDao()
     }
 
-    fun getAllNotes(): LiveData<List<Note>> = mNotesDao.getAllNotes()
+    fun getAllNotes(): DataSource.Factory<Int, Note> = mNotesDao.getAllNotes()
 
     fun insert(note:Note) {
         executorService.execute {
