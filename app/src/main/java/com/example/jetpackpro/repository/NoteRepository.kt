@@ -6,6 +6,7 @@ import androidx.paging.DataSource
 import com.example.jetpackpro.database.Note
 import com.example.jetpackpro.database.NoteDao
 import com.example.jetpackpro.database.NoteDatabase
+import com.example.jetpackpro.helper.SortUtils
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -18,7 +19,10 @@ class NoteRepository(application: Application) {
         mNotesDao = db.noteDao()
     }
 
-    fun getAllNotes(): DataSource.Factory<Int, Note> = mNotesDao.getAllNotes()
+    fun getAllNotes(sort: String): DataSource.Factory<Int, Note>{
+        val query = SortUtils.getSortedQuery(sort)
+        return mNotesDao.getAllNotes(query)
+    }
 
     fun insert(note:Note) {
         executorService.execute {

@@ -11,6 +11,6 @@ import com.example.jetpackpro.repository.NoteRepository
 class MainViewModel(application: Application) : ViewModel() {
     private val mNoteRepository: NoteRepository = NoteRepository(application)
 
-    fun getAllNotes(): LiveData<PagedList<Note>> =
-        LivePagedListBuilder(mNoteRepository.getAllNotes(), 5).build()
+    fun getAllNotes(sort: String): LiveData<PagedList<Note>> =
+        LivePagedListBuilder(mNoteRepository.getAllNotes(sort), 5).build()
 }
