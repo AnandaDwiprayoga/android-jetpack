@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import com.example.jetpackpro.AcademyRepository
 import com.example.jetpackpro.data.CourseEntity
 import com.example.jetpackpro.utils.DataDummy
+import com.example.jetpackpro.vo.Resource
 import org.junit.Before
 import org.junit.Test
 
@@ -30,7 +31,7 @@ class AcademyViewModelTest {
 
 
     @Mock
-    private lateinit var observer: Observer<List<CourseEntity>>
+    private lateinit var observer: Observer<Resource<List<CourseEntity>>>
 
     @Before
     fun setUp() {
@@ -39,15 +40,15 @@ class AcademyViewModelTest {
 
     @Test
     fun getCourses() {
-        val dummyCourses = DataDummy.generateDummyCourses()
-        val courses = MutableLiveData<List<CourseEntity>>()
+        val dummyCourses = Resource.success(DataDummy.generateDummyCourses())
+        val courses = MutableLiveData<Resource<List<CourseEntity>>>()
         courses.value = dummyCourses
 
         `when`(academyRepository.getAllCourses()).thenReturn(courses)
-        val courseEntities = viewModel.getCourses()
+        val courseEntities = viewModel.getCourses().value?.data
         verify(academyRepository).getAllCourses()
         assertNotNull(courseEntities)
-        assertEquals(5, courseEntities.value?.size)
+        assertEquals(5, courseEntities?.size)
 
         viewModel.getCourses().observeForever(observer)
         verify(observer).onChanged(dummyCourses)

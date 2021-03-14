@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.jetpackpro.AcademyRepository
 import com.example.jetpackpro.data.CourseEntity
+import com.example.jetpackpro.data.CourseWithModule
 import com.example.jetpackpro.data.ModuleEntity
 import com.example.jetpackpro.utils.DataDummy
+import com.example.jetpackpro.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
@@ -32,10 +34,8 @@ class DetailCourseViewModelTest {
     private lateinit var academyRepository: AcademyRepository
 
     @Mock
-    private lateinit var courseObserver: Observer<CourseEntity>
+    private lateinit var observer: Observer<Resource<CourseWithModule>>
 
-    @Mock
-    private lateinit var modulesObserver: Observer<List<ModuleEntity>>
 
     @Before
     fun setUp() {
@@ -44,40 +44,12 @@ class DetailCourseViewModelTest {
     }
 
     @Test
-    fun getCourse() {
-        val course = MutableLiveData<CourseEntity>()
-        course.value = dummyCourse
-
+    fun getCourseWithModule() {
+        val dummyCourseWithModule = Resource.success(DataDummy.generateDummyCourseWithModules(dummyCourse, true))
+        val course = MutableLiveData<Resource<CourseWithModule>>()
+        course.value = dummyCourseWithModule
         `when`(academyRepository.getCourseWithModules(courseId)).thenReturn(course)
-        val courseEntity = viewModel.getCourse().value as CourseEntity
-        verify(academyRepository).getCourseWithModules(courseId)
-
-        assertNotNull(courseEntity)
-        assertEquals(dummyCourse.courseId, courseEntity.courseId)
-        assertEquals(dummyCourse.deadline, courseEntity.deadline)
-        assertEquals(dummyCourse.description, courseEntity.description)
-        assertEquals(dummyCourse.imagePath, courseEntity.imagePath)
-        assertEquals(dummyCourse.title, courseEntity.title)
-
-        viewModel.getCourse().observeForever(courseObserver)
-        verify(courseObserver).onChanged(dummyCourse)
-    }
-
-    @Test
-    fun getModules() {
-        val module = MutableLiveData<List<ModuleEntity>>()
-        module.value = dummyModules
-
-        `when`(academyRepository.getAllModulesByCourse(courseId)).thenReturn(module)
-        val moduleEntity = viewModel.getModules().value
-        verify(academyRepository).getAllModulesByCourse(courseId)
-
-
-        assertNotNull(moduleEntity)
-        assertEquals(7, moduleEntity?.size)
-
-        viewModel.getModules().observeForever(modulesObserver)
-        verify(modulesObserver).onChanged(dummyModules)
-
+        viewModel.courseModule.observeForever(observer)
+        verify(observer).onChanged(dummyCourseWithModule)
     }
 }

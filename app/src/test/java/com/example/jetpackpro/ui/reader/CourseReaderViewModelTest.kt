@@ -8,6 +8,7 @@ import com.example.jetpackpro.AcademyRepository
 import com.example.jetpackpro.data.ContentEntity
 import com.example.jetpackpro.data.ModuleEntity
 import com.example.jetpackpro.utils.DataDummy
+import com.example.jetpackpro.vo.Resource
 import org.junit.Before
 import org.junit.Test
 
@@ -15,8 +16,7 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -53,39 +53,27 @@ class CourseReaderViewModelTest {
 
     @Test
     fun getModules() {
-        val modules = MutableLiveData<List<ModuleEntity>>()
-        modules.value = dummyModules
+        val modules = MutableLiveData<Resource<List<ModuleEntity>>>()
+        val resource = Resource.success(dummyModules) as Resource<List<ModuleEntity>>
+        modules.value = resource
 
         `when`(academyRepository.getAllModulesByCourse(courseId)).thenReturn(modules)
-        val moduleEntities = viewModel.getModules()
 
-        verify(academyRepository).getAllModulesByCourse(courseId)
+        val observer = mock(Observer::class.java) as Observer<Resource<List<ModuleEntity>>>
 
-        assertNotNull(moduleEntities)
-        assertEquals(7, moduleEntities.value?.size)
-
-        viewModel.getModules().observeForever(modulesObserver)
-        verify(modulesObserver).onChanged(dummyModules)
+        viewModel.modules.observeForever(observer)
+        verify(observer).onChanged(resource)
     }
 
     @Test
     fun getSelectedModule() {
-        val module = MutableLiveData<ModuleEntity>()
-        module.value = dummyModules[0]
+        val module = MutableLiveData<Resource<ModuleEntity>>()
+        val resource = Resource.success(dummyModules[0])
+        module.value = resource
+        `when`(academyRepository.getContent(moduleId)).thenReturn(module)
 
-        `when`(academyRepository.getContent(courseId,moduleId)).thenReturn(module)
-        val moduleEntity = viewModel.getSelectedModule()
-        verify(academyRepository).getContent(courseId, moduleId)
-
-        assertNotNull(moduleEntity)
-        val contentEntity = moduleEntity.value?.contentEntity
-        assertNotNull(contentEntity)
-
-        val content = contentEntity?.content
-        assertNotNull(content)
-        assertEquals(content, dummyModules[0].contentEntity?.content)
-
-        viewModel.getSelectedModule().observeForever(moduleObserver)
-        verify(moduleObserver).onChanged(dummyModules[0])
+        val observer = mock(Observer::class.java) as Observer<Resource<ModuleEntity>>
+        viewModel.selectedModule.observeForever(observer)
+        verify(observer).onChanged(resource)
     }
 }

@@ -1,6 +1,8 @@
 package com.example.jetpackpro.utils
 
+import com.example.jetpackpro.data.ContentEntity
 import com.example.jetpackpro.data.CourseEntity
+import com.example.jetpackpro.data.CourseWithModule
 import com.example.jetpackpro.data.ModuleEntity
 import com.example.jetpackpro.data.source.remote.response.ContentResponse
 import com.example.jetpackpro.data.source.remote.response.CourseResponse
@@ -155,7 +157,21 @@ object DataDummy {
         return modules
     }
 
-    fun generateRemoteDummyContent(moduleId: String): ContentResponse {
-        return ContentResponse(moduleId, "This is a dummy content")
+
+    fun generateRemoteDummyContent(moduleId: String): ContentResponse =
+            ContentResponse(moduleId, "This is a dummy content")
+
+    fun generateDummyCourseWithModules(course: CourseEntity, bookmarked: Boolean): CourseWithModule {
+        course.bookmarked = bookmarked
+        return CourseWithModule(course, generateDummyModules(course.courseId))
+    }
+
+    fun generateDummyContent(moduleId: String): ContentEntity =
+            ContentEntity("This is a dummy content")
+
+    fun generateDummyModuleWithContent(courseId: String): ModuleEntity {
+        val moduleEntity = generateDummyModules(courseId)[0]
+        moduleEntity.contentEntity = generateDummyContent(moduleEntity.moduleId)
+        return moduleEntity
     }
 }
